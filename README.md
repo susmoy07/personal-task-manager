@@ -1,39 +1,61 @@
-# 📋 Personal Task Manager
+# 📋 TaskFlow — Personal Task Manager
 
-A clean, modern, and lightweight personal task management web application built with vanilla HTML, CSS, and JavaScript. Keep track of your daily tasks, set priorities, manage due dates, and switch between light and dark modes with persistent local storage.
+A sleek, modern, and powerful personal task manager with glassmorphic aesthetics, productivity analytics, rich categories, dark mode, keyboard shortcuts, and instant search. Built with vanilla HTML5, CSS3, and JavaScript with zero external dependencies.
 
 ---
 
-## ✨ Features
+## ✨ Key Features
 
-- **📝 Task Management**: Quickly add, complete, and delete tasks.
-- **🎯 Priority Levels**: Assign priority tags to tasks with visual color indicators:
-  - 🟢 **Low**
-  - 🟡 **Medium**
-  - 🔴 **High**
-- **📅 Due Dates & Overdue Alerts**:
-  - Assign optional due dates to tasks.
-  - Automatically highlights overdue tasks with warning indicators.
-  - Tasks are automatically sorted with the soonest due date first.
-- **🔍 Filter Views**: Switch effortlessly between:
-  - **All**: View all tasks.
-  - **Pending**: View active/uncompleted tasks.
-  - **Completed**: View finished tasks.
-- **🌓 Dark Mode**: Toggle between light and dark themes with persistent preference.
-- **💾 Local Storage Persistence**: All tasks and theme preferences are automatically saved in the browser's `localStorage` so your data persists across page reloads.
-- **✨ Polished UI & Micro-interactions**:
-  - Smooth task deletion and entrance animations.
-  - Input validation shake animation for empty submissions.
-  - Responsive layout optimized for desktop, tablet, and mobile screens.
-  - Custom SVG icons and typography using Google Fonts (Inter).
+- **🚀 Productivity Dashboard**:
+  - Live progress bar with completion percentage.
+  - Quick-view metrics: Total, Pending, Completed, and Overdue tasks.
+  - Batch operations: *Mark All Done*, *Clear Completed*, *Export JSON*, and *Import JSON*.
+
+- **🏷️ Categories & Tags**:
+  - Organize tasks into categories: **Work** 💼, **Personal** 🏠, **Study** 📚, **Health** 🏃, **Finance** 💰, and **General** 🎯.
+  - Filter tasks by category or status with one click.
+
+- **⚡ Priority Levels & Pinning**:
+  - 4 priority tiers: **Low** 🟢, **Medium** 🟡, **High** 🔴, and **Urgent** ⚡.
+  - **Star / Pin Tasks**: Pin critical tasks to the top of your list.
+
+- **📅 Smart Due Dates & Presets**:
+  - Quick due date preset chips: *Today*, *Tomorrow*, *This Weekend*, and *Next Week (+7d)*.
+  - Real-time overdue and today warning badges.
+  - Automated sorting by soonest due date, priority, newest, or alphabetical.
+
+- **🔍 Instant Search & Multi-Filters**:
+  - Real-time search across task titles, notes, and tags.
+  - Status tabs: *All*, *Active*, *Done*, and *Starred*.
+
+- **📝 Task Notes & Editing**:
+  - Add detailed notes, links, or sub-task notes to any task.
+  - Edit modal to update task titles, notes, categories, priorities, and due dates anytime.
+
+- **🎉 Delightful Micro-Interactions**:
+  - Pure Canvas Confetti celebration upon finishing all tasks or hitting 100% completion.
+  - Web Audio API pleasant synth chimes upon completing tasks (with mute toggle).
+  - Undo deletion snackbar toasts.
+
+- **🌓 Glassmorphic UI & Dark Mode**:
+  - High-end glassmorphism design with ambient glowing backdrops.
+  - Seamless dark and light theme switching with localStorage persistence.
+  - Responsive design optimized for mobile, tablet, and widescreen desktops.
+
+- **⌨️ Keyboard Shortcuts**:
+  - <kbd>/</kbd> : Focus search bar
+  - <kbd>N</kbd> : Jump to add new task
+  - <kbd>D</kbd> : Toggle dark / light mode
+  - <kbd>Esc</kbd> : Close modals or clear search
+  - <kbd>?</kbd> : Open keyboard shortcuts reference
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **HTML5**: Semantic markup with ARIA accessibility roles and labels.
-- **CSS3**: Custom CSS variables, responsive design (Flexbox & CSS Grid), glassmorphism accents, and smooth transitions.
-- **JavaScript (ES6+)**: Pure vanilla JavaScript with no external libraries or framework dependencies.
+- **HTML5**: Semantic markup, accessible dialogs, ARIA roles.
+- **CSS3**: Custom HSL color variables, Glassmorphism (`backdrop-filter`), CSS Grid & Flexbox, smooth keyframe animations.
+- **JavaScript (ES6+)**: Pure vanilla JavaScript, Web Audio API, Canvas 2D API, localStorage persistence.
 
 ---
 
@@ -41,60 +63,31 @@ A clean, modern, and lightweight personal task management web application built 
 
 ```plaintext
 personal-task-manager/
-├── index.html       # Main HTML markup and app shell
-├── style.css        # Design system, theme variables, layout, and animations
-├── script.js        # Core logic, DOM manipulation, and localStorage persistence
+├── index.html       # App shell, semantic containers, modals & canvas
+├── style.css        # Glassmorphic design system, tokens, and responsive layout
+├── script.js        # Core engine, state, audio synth, confetti, and storage
 ├── .gitignore       # Git ignore rules
-└── README.md        # Project documentation
+└── README.md        # Documentation and guide
 ```
 
 ---
 
 ## 🚀 Getting Started
 
-No build step or external dependencies are required. You can run the project immediately:
-
 ### Option 1: Direct File Open
-Simply double-click `index.html` or open it directly in any modern web browser.
+Open `index.html` directly in any modern browser (Chrome, Safari, Edge, Firefox).
 
 ### Option 2: Local Static Server (Recommended)
-Run a local static server for the best development experience:
-
-**Using Python:**
 ```bash
-# Python 3
+# Using Python
 python -m http.server 3000
-```
 
-**Using Node.js (`serve` or `npx live-server`):**
-```bash
+# Or using Node.js
 npx serve .
-# or
-npx live-server
 ```
-
-Then visit `http://localhost:3000` (or the port specified in your terminal).
-
----
-
-## 📖 Usage Guide
-
-1. **Adding a Task**:
-   - Type your task description in the input field.
-   - Select a priority level (Low, Medium, High).
-   - (Optional) Choose a due date.
-   - Click **Add Task** or press <kbd>Enter</kbd>.
-2. **Completing a Task**: Click the checkbox next to any task to mark it as complete.
-3. **Deleting a Task**: Click the trash icon on any task card.
-4. **Filtering Tasks**: Use the filter tabs at the top of the task list to switch between **All**, **Pending**, and **Completed**.
-5. **Toggling Dark Mode**: Click the moon/sun icon in the top header to toggle themes.
+Then navigate to `http://localhost:3000`.
 
 ---
 
-## 🌐 Browser Support
-
-Compatible with all modern web browsers supporting ES6+ and `crypto.randomUUID()`:
-- Google Chrome / Chromium
-- Mozilla Firefox
-- Microsoft Edge
-- Apple Safari
+## 💾 Data Portability
+All data is stored offline in your browser's `localStorage`. You can back up or transfer your task list anytime using the built-in **Export JSON** and **Import JSON** buttons.
