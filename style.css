@@ -1,0 +1,616 @@
+/* =============================================================
+   style.css  —  Personal Task Manager
+   Organised into sections:
+   1. CSS Custom Properties (design tokens)
+   2. Reset & Base
+   3. Layout
+   4. Header
+   5. Input Card / Form
+   6. Toolbar (filters + count)
+   7. Task List & Task Items
+   8. Priority indicators
+   9. Empty State
+   10. Footer
+   11. Dark-mode overrides
+   12. Responsive tweaks
+   13. Animations & micro-interactions
+============================================================= */
+
+
+/* ── 1. CSS Custom Properties (Light Theme Defaults) ─────── */
+:root {
+  /* Brand palette */
+  --clr-primary:        hsl(250, 84%, 62%);   /* vivid indigo */
+  --clr-primary-hover:  hsl(250, 84%, 52%);
+  --clr-primary-glow:   hsl(250, 84%, 62%, 0.25);
+
+  /* Backgrounds */
+  --clr-bg:             hsl(220, 20%, 97%);
+  --clr-surface:        hsl(0, 0%, 100%);
+  --clr-surface-raised: hsl(220, 20%, 99%);
+  --clr-border:         hsl(220, 15%, 88%);
+
+  /* Text */
+  --clr-text-primary:   hsl(220, 25%, 14%);
+  --clr-text-secondary: hsl(220, 15%, 48%);
+  --clr-text-muted:     hsl(220, 12%, 68%);
+
+  /* Priority colours */
+  --clr-low:            hsl(145, 60%, 42%);   /* green  */
+  --clr-medium:         hsl(38,  95%, 50%);   /* amber  */
+  --clr-high:           hsl(4,   80%, 54%);   /* red    */
+
+  /* Priority bg tints */
+  --clr-low-bg:         hsl(145, 60%, 95%);
+  --clr-medium-bg:      hsl(38,  95%, 95%);
+  --clr-high-bg:        hsl(4,   80%, 96%);
+
+  /* Shadows */
+  --shadow-sm:   0 1px 3px hsl(220, 20%, 60%, 0.12), 0 1px 2px hsl(220, 20%, 60%, 0.08);
+  --shadow-md:   0 4px 14px hsl(220, 20%, 50%, 0.12), 0 2px 6px hsl(220, 20%, 50%, 0.08);
+  --shadow-lg:   0 10px 30px hsl(220, 20%, 40%, 0.14);
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-med:  250ms ease;
+}
+
+
+/* ── 2. Reset & Base ─────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--clr-bg);
+  color: var(--clr-text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  /* Smooth theme transitions */
+  transition: background-color var(--transition-med), color var(--transition-med);
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input,
+select {
+  font-family: inherit;
+}
+
+
+/* ── 3. Layout ───────────────────────────────────────────── */
+.app-wrapper {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+
+/* ── 4. Header ───────────────────────────────────────────── */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--clr-primary);
+  flex-shrink: 0;
+}
+
+.brand-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--clr-text-primary);
+}
+
+/* Dark mode toggle button */
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--clr-text-secondary);
+  border: 1.5px solid var(--clr-border);
+  background: var(--clr-surface);
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast),
+              box-shadow var(--transition-fast),
+              transform var(--transition-fast);
+}
+
+.icon-btn:hover {
+  color: var(--clr-primary);
+  border-color: var(--clr-primary);
+  box-shadow: 0 0 0 3px var(--clr-primary-glow);
+  transform: scale(1.06);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Show moon in light mode, sun in dark mode */
+.icon-sun  { display: none;  }
+.icon-moon { display: block; }
+
+
+/* ── 5. Input Card / Form ────────────────────────────────── */
+.input-card {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--clr-text-secondary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+/* A single label + input row */
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Two fields side by side */
+.form-row--inline {
+  flex-direction: row;
+  gap: 14px;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--clr-text-secondary);
+}
+
+/* Shared input / select styles */
+.form-control {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--clr-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.9375rem;
+  color: var(--clr-text-primary);
+  background: var(--clr-bg);
+  outline: none;
+  transition: border-color var(--transition-fast),
+              box-shadow   var(--transition-fast),
+              background   var(--transition-med);
+}
+
+.form-control:focus {
+  border-color: var(--clr-primary);
+  box-shadow: 0 0 0 3px var(--clr-primary-glow);
+}
+
+.form-control::placeholder {
+  color: var(--clr-text-muted);
+}
+
+/* Make native date picker icon blend better */
+.form-control[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+/* Add Task button */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  transition: background-color var(--transition-fast),
+              box-shadow       var(--transition-fast),
+              transform        var(--transition-fast);
+}
+
+.btn--primary {
+  background: var(--clr-primary);
+  color: #fff;
+  box-shadow: 0 4px 14px hsl(250, 84%, 62%, 0.35);
+  align-self: flex-start;
+}
+
+.btn--primary:hover {
+  background: var(--clr-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px hsl(250, 84%, 62%, 0.45);
+}
+
+.btn--primary:active {
+  transform: translateY(0);
+}
+
+.btn-icon {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+
+/* ── 6. Toolbar (filter tabs + count) ────────────────────── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  padding: 4px;
+  box-shadow: var(--shadow-sm);
+}
+
+.filter-tab {
+  padding: 6px 16px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--clr-text-secondary);
+  transition: background-color var(--transition-fast),
+              color             var(--transition-fast);
+}
+
+.filter-tab:hover {
+  color: var(--clr-text-primary);
+  background: var(--clr-bg);
+}
+
+.filter-tab.active {
+  background: var(--clr-primary);
+  color: #fff;
+  box-shadow: 0 2px 8px hsl(250, 84%, 62%, 0.35);
+}
+
+/* Live task count */
+.task-count {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--clr-text-muted);
+  white-space: nowrap;
+}
+
+
+/* ── 7. Task List & Task Items ───────────────────────────── */
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Individual task card */
+.task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+  /* Priority left-border accent */
+  border-left-width: 4px;
+  border-left-style: solid;
+  transition: box-shadow     var(--transition-fast),
+              opacity        var(--transition-fast),
+              transform      var(--transition-fast),
+              border-color   var(--transition-fast),
+              background     var(--transition-med);
+
+  /* Slide-in animation on creation */
+  animation: slideIn 220ms ease both;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.task-item:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+/* Completed state */
+.task-item.completed {
+  opacity: 0.6;
+}
+
+.task-item.completed .task-title {
+  text-decoration: line-through;
+  color: var(--clr-text-muted);
+}
+
+/* Checkbox */
+.task-checkbox {
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  accent-color: var(--clr-primary);
+  cursor: pointer;
+}
+
+/* Text content group */
+.task-content {
+  flex: 1;
+  min-width: 0; /* prevent overflow */
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.task-title {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  word-break: break-word;
+  transition: color var(--transition-fast);
+}
+
+/* Due date + priority badge row */
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Priority badge pill */
+.priority-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 9px;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Due date label */
+.due-date-label {
+  font-size: 0.78rem;
+  color: var(--clr-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.due-date-label.overdue {
+  color: var(--clr-high);
+  font-weight: 600;
+}
+
+.due-date-label svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* Delete button */
+.delete-btn {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--clr-text-muted);
+  opacity: 0;                         /* hidden until hover */
+  transition: opacity       var(--transition-fast),
+              color         var(--transition-fast),
+              background    var(--transition-fast);
+}
+
+.task-item:hover .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn:hover {
+  color: var(--clr-high);
+  background: var(--clr-high-bg);
+}
+
+.delete-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+
+/* ── 8. Priority Colours ─────────────────────────────────── */
+
+/* Border accent (left side) */
+.task-item[data-priority="low"]    { border-left-color: var(--clr-low);    }
+.task-item[data-priority="medium"] { border-left-color: var(--clr-medium); }
+.task-item[data-priority="high"]   { border-left-color: var(--clr-high);   }
+
+/* Badge background + text */
+.priority-badge.low {
+  background: var(--clr-low-bg);
+  color: var(--clr-low);
+}
+.priority-badge.medium {
+  background: var(--clr-medium-bg);
+  color: hsl(38, 95%, 30%);
+}
+.priority-badge.high {
+  background: var(--clr-high-bg);
+  color: var(--clr-high);
+}
+
+
+/* ── 9. Empty State ──────────────────────────────────────── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 56px 24px;
+  color: var(--clr-text-muted);
+  text-align: center;
+}
+
+.empty-state p {
+  font-size: 0.9375rem;
+}
+
+.empty-icon {
+  width: 72px;
+  height: 72px;
+  opacity: 0.35;
+}
+
+/* Hidden utility */
+.hidden {
+  display: none !important;
+}
+
+
+/* ── 10. Footer ──────────────────────────────────────────── */
+.app-footer {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--clr-text-muted);
+  padding-top: 8px;
+}
+
+
+/* ── 11. Dark Mode Overrides ─────────────────────────────── */
+body.dark-mode {
+  --clr-bg:             hsl(222, 22%, 11%);
+  --clr-surface:        hsl(222, 20%, 15%);
+  --clr-surface-raised: hsl(222, 20%, 18%);
+  --clr-border:         hsl(222, 18%, 24%);
+
+  --clr-text-primary:   hsl(220, 15%, 92%);
+  --clr-text-secondary: hsl(220, 12%, 64%);
+  --clr-text-muted:     hsl(220, 10%, 44%);
+
+  /* Slightly brighter priority tints for dark bg */
+  --clr-low-bg:         hsl(145, 40%, 16%);
+  --clr-medium-bg:      hsl(38,  60%, 16%);
+  --clr-high-bg:        hsl(4,   50%, 16%);
+
+  /* Shadows are more subtle on dark bg */
+  --shadow-sm: 0 1px 4px hsl(0, 0%, 0%, 0.35);
+  --shadow-md: 0 4px 16px hsl(0, 0%, 0%, 0.40);
+}
+
+/* Swap moon ↔ sun icons */
+body.dark-mode .icon-moon { display: none;  }
+body.dark-mode .icon-sun  { display: block; }
+
+
+/* ── 12. Responsive Tweaks ───────────────────────────────── */
+@media (max-width: 480px) {
+  .form-row--inline {
+    flex-direction: column;
+  }
+
+  .btn--primary {
+    width: 100%;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+
+/* ── 13. Micro-interactions ──────────────────────────────── */
+
+/* Pulse on the Add button when user types in the input */
+.btn--primary.pulse {
+  animation: btnPulse 400ms ease;
+}
+
+@keyframes btnPulse {
+  0%   { box-shadow: 0 4px 14px hsl(250,84%,62%,0.35); }
+  50%  { box-shadow: 0 4px 28px hsl(250,84%,62%,0.65); }
+  100% { box-shadow: 0 4px 14px hsl(250,84%,62%,0.35); }
+}
+
+/* Task removal slide-out */
+.task-item.removing {
+  animation: slideOut 200ms ease forwards;
+}
+
+@keyframes slideOut {
+  from { opacity: 1; transform: translateX(0);     max-height: 200px; }
+  to   { opacity: 0; transform: translateX(40px);  max-height: 0;     padding: 0; margin: 0; }
+}
